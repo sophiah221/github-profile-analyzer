@@ -12,6 +12,13 @@ if response.status_code != 200:
     print("Fehler: Benutzer nicht gefunden")
     exit()
 
+# Sprachen aufzählen
+languages = {}
+for repo in repos:
+    language = repo["language"]
+    if language:
+        languages[language] = languages.get(language, 0) +1
+
 #Ausgabe
 print(f"---Github Profil von {username}:---")
 print(f"Name: {data["name"]}")
@@ -23,8 +30,17 @@ if data["public_repos"] >0:
     print("---Repositories:---")
     for repo in repos:
         print(f"- {repo["name"]}")
+    
     print()
     if data["public_repos"] >5:
-        print("---Top 5 Repositories nach Sternen:---")
+        print("Top 5 Repositories nach Sternen:")
         for repo in repos[:5]:
             print(f"- {repo["name"]} ({repo["stargazers_count"]} Sterne)")
+    print()
+    if data["public_repos"] >0:
+        print("Verwendete Sprachen:")
+        for language, count in languages.items():
+            if count == 1:
+                print(f"{language}: {count} Repository")
+            else:
+                print(f"{language}: {count} Repositories")
